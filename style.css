@@ -1,0 +1,28 @@
+table {
+	margin-top: 1rem;
+	margin-right: 1rem;
+}
+td, th {
+	padding: 5px 10px;
+}
+
+.background-info-label {
+	background-color: black;
+	color: white;
+}
+
+.table-sub-title {
+	background-color: darkblue;
+	color: white;
+}
+
+
+#countries-list,
+#countries-list-header,
+#search-alert {
+	display: none;
+}
+
+#countries {
+	flex-wrap: wrap;
+}
