@@ -16,14 +16,19 @@
 
     <div class="container">
         <h1>Search countries</h1>
-            <input id="country-name" type="text" />
-            <button id="search">Search</button>
+            <input id="input-country-name" type="text" />
+            <button id="btn-search">Search</button>
             <h2 id="countries-list-header">Countries' list</h2>
             <div class="alert alert-danger" id="search-alert"></div>
             <div id="countries-list">
                 <table class="table-bordered country-table">
                     <tr>
-                        <td colspan="2"><h3 class="country-name">Country name</h3></td>
+                        <td class="country-flag">
+                            <img />
+                        </td>
+                        <td class="country-name">
+                            <h3>Country name</h3>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="2" class="table-sub-title">Background Information:</td>
@@ -53,6 +58,7 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="languages.js"></script>
     <script type="text/javascript" src="scripts.js"></script>
 </body>
 </html>

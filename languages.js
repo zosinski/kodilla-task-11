@@ -1,4 +1,4 @@
-{"isoLangs":[
+var isoLangs = {
     "ab":{
         "name":"Abkhaz",
         "nativeName":"аҧсуа"
@@ -727,4 +727,12 @@
         "name":"Zhuang, Chuang",
         "nativeName":"Saɯ cueŋƅ, Saw cuengh"
     }
-]}
+};
+
+function getLanguageFullName(languageCode) {
+    if (languageCode.length === 2) {
+        var language = isoLangs[languageCode];
+        if (language) {return language.name};
+    };
+    return languageCode + ' language code unrecognized';
+};
