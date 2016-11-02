@@ -14,7 +14,6 @@ $('#input-country-name').keyup( function(event) {
 function searchCountries() {
 	var url = 'https://restcountries.eu/rest/v1/name/';
  	var searchString = $('#input-country-name').val().toLowerCase();
-	if (!searchString.length) searchString = 'Poland';
 
 	var request = $.ajax({
 		url: url + searchString,
@@ -30,7 +29,7 @@ function searchCountries() {
 		},
 		error: function(response) {
 			hideCountriesList();
-			if (jqXHR.status === 404) { noMatchAlert(); }
+			if (response.status === 404) { noMatchAlert(); }
 		}
 	});
 
@@ -40,7 +39,7 @@ function filterNarrowMatchingCountries (response, searchString) {
 	// zwraca kraje, dla których szukana fraza zawiera się w głównej nazwie kraju
 	function isMatchingPrimaryName(country) {
 		var countryName = country.name.toLowerCase();
-		return (country.name.toLowerCase().search(searchString) !== -1);
+		return (country.name.toLowerCase().indexOf(searchString) !== -1);
 	};
 
 	return response.filter(isMatchingPrimaryName);
@@ -67,14 +66,8 @@ function showCountriesList(responseFiltered, searchString) {
 		countryTable.find('.population').text(country.population);
 		countryTable.find('.currency').text(country.currencies.join(", "));
 
-		var languagesFullNames = [];
-		country.languages.forEach(function(languageCode){
-			// languageFullName = 
-			languagesFullNames.push( getLanguageFullName(languageCode) );
-		});
-		
-		countryTable.find('.languages').text(languagesFullNames.join(", ")); 
-		// countryTable.find('.languages').text(item.languages.join(", ")); 
+		var languagesFullNames = country.languages.map( getLanguageFullName );
+		countryTable.find('.languages').text(languagesFullNames.join(", "));  
 
 		// dodanie tabeli do DOM
 		countriesList.append( countryTable );
@@ -85,10 +78,9 @@ function showCountriesList(responseFiltered, searchString) {
 	});
 }
 
-function hideCountriesList(jqXHR) {
+function hideCountriesList() {
 	$('#countries-list').css('display', 'none');
 	$('#countries-list-header').css('display', 'none');
-
 }
 
 function noMatchAlert() {
