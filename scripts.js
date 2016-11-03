@@ -13,7 +13,7 @@ $('#input-country-name').keyup( function(event) {
 $('#input-country-name').focus();
 
 
-var searchCountries = () => {
+function searchCountries() {
 	const url = 'https://restcountries.eu/rest/v1/name/';
  	const searchString = $('#input-country-name').val().toLowerCase();
 
@@ -37,9 +37,9 @@ var searchCountries = () => {
 
 }
 
-var filterNarrowMatchingCountries = (response, searchString) => {
+function filterNarrowMatchingCountries(response, searchString) {
 	// zwraca kraje, dla których szukana fraza zawiera się w głównej nazwie kraju
-	var isMatchingPrimaryName = country => {
+	function isMatchingPrimaryName(country) {
 		const countryName = country.name.toLowerCase();
 		return (country.name.toLowerCase().indexOf(searchString) !== -1);
 	};
@@ -48,7 +48,7 @@ var filterNarrowMatchingCountries = (response, searchString) => {
 }
 
 
-var showCountriesList = (responseFiltered, searchString) => {
+function showCountriesList(responseFiltered, searchString) {
 	const countriesList = $('#countries-list');
 	const countriesListHeader = $('#countries-list-header');
 	let countryTable = $('.country-table').last().clone();
@@ -80,12 +80,12 @@ var showCountriesList = (responseFiltered, searchString) => {
 	});
 }
 
-var hideCountriesList = () => {
+function hideCountriesList() {
 	$('#countries-list').css('display', 'none');
 	$('#countries-list-header').css('display', 'none');
 }
 
-var showAlert = message => {
+function showAlert(message) {
 	const alert = $('#search-alert').addClass('alert alert-danger').text(message);
 	alert.show('fast');
 	setTimeout( () => {alert.hide('slow')}, message.length * 100 ); 	
