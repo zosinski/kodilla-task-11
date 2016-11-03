@@ -4,41 +4,43 @@ $('#btn-search').prop('disabled',true).addClass('btn-disabled');
 $('#input-country-name').keyup( function(event) {
 	if ($(this).val().length > 2) {
 		$('#btn-search').prop('disabled',false).removeClass('btn-disabled');
-		if (event.which == 13) {searchCountries()};
+		if (event.which === 13) {searchCountries()};
 		return
 	}
 	$('#btn-search').prop('disabled',true).addClass('btn-disabled');
+	if (event.which === 13) showAlert('Query needs to be at least 3 characters long.');
 });
+$('#input-country-name').focus();
 
 
-function searchCountries() {
-	var url = 'https://restcountries.eu/rest/v1/name/';
- 	var searchString = $('#input-country-name').val().toLowerCase();
+var searchCountries = () => {
+	const url = 'https://restcountries.eu/rest/v1/name/';
+ 	const searchString = $('#input-country-name').val().toLowerCase();
 
-	var request = $.ajax({
+	$.ajax({
 		url: url + searchString,
 		method: 'GET',
-		success: function(response) {
-			var responseFiltered = filterNarrowMatchingCountries(response, searchString);
+		success: response => {
+			const responseFiltered = filterNarrowMatchingCountries(response, searchString);
 			if (responseFiltered.length) {
 				showCountriesList(responseFiltered, searchString);
 				return;
 			};
 			hideCountriesList();
-			noMatchAlert();
+			showAlert('No match. Try again.');
 		},
-		error: function(response) {
+		error: response => {
 			hideCountriesList();
-			if (response.status === 404) { noMatchAlert(); }
+			if (response.status === 404) { showAlert('No match. Try again.'); }
 		}
 	});
 
 }
 
-function filterNarrowMatchingCountries (response, searchString) {
+var filterNarrowMatchingCountries = (response, searchString) => {
 	// zwraca kraje, dla których szukana fraza zawiera się w głównej nazwie kraju
-	function isMatchingPrimaryName(country) {
-		var countryName = country.name.toLowerCase();
+	var isMatchingPrimaryName = country => {
+		const countryName = country.name.toLowerCase();
 		return (country.name.toLowerCase().indexOf(searchString) !== -1);
 	};
 
@@ -46,16 +48,16 @@ function filterNarrowMatchingCountries (response, searchString) {
 }
 
 
-function showCountriesList(responseFiltered, searchString) {
-	var countriesList = $('#countries-list');
-	var countryTable = $('.country-table').last().clone();
-	var countriesListHeader = $('#countries-list-header');
+var showCountriesList = (responseFiltered, searchString) => {
+	const countriesList = $('#countries-list');
+	const countriesListHeader = $('#countries-list-header');
+	let countryTable = $('.country-table').last().clone();
 	countriesList.empty();
 	countriesList.css('display','flex');
 
 	countriesListHeader.text('Search results matching \"' + searchString +'\"').css('display', 'block');
 
-	responseFiltered.forEach(function(country){
+	responseFiltered.forEach( (country) => {
 	
 		// uzupełnianie danych tabeli ;
 		countryTable.find('.country-flag').children('img').attr('src','http://www.geonames.org/flags/x/'
@@ -66,7 +68,7 @@ function showCountriesList(responseFiltered, searchString) {
 		countryTable.find('.population').text(country.population);
 		countryTable.find('.currency').text(country.currencies.join(", "));
 
-		var languagesFullNames = country.languages.map( getLanguageFullName );
+		const languagesFullNames = country.languages.map( getLanguageFullName );
 		countryTable.find('.languages').text(languagesFullNames.join(", "));  
 
 		// dodanie tabeli do DOM
@@ -78,13 +80,13 @@ function showCountriesList(responseFiltered, searchString) {
 	});
 }
 
-function hideCountriesList() {
+var hideCountriesList = () => {
 	$('#countries-list').css('display', 'none');
 	$('#countries-list-header').css('display', 'none');
 }
 
-function noMatchAlert() {
-	var alert = $('#search-alert').addClass('alert alert-danger').text('No match. Try again.');
+var showAlert = message => {
+	const alert = $('#search-alert').addClass('alert alert-danger').text(message);
 	alert.show('fast');
-	setTimeout( function() {alert.hide('slow')}, 3000 ); 	
+	setTimeout( () => {alert.hide('slow')}, message.length * 100 ); 	
 }
